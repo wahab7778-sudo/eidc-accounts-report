@@ -1163,21 +1163,11 @@ body {
 }
 
 @media print {
-    @page {
-        size: A4 landscape;
-        margin: 10mm;
-    }
-
-    body {
-        background: #fff !important;
-        color: #000 !important;
-    }
 
     .sidebar,
     .topbar,
     .page-toolbar,
-    .no-print,
-    .btn-demo-mode {
+    .no-print {
         display: none !important;
     }
 
@@ -1190,63 +1180,6 @@ body {
     .page {
         padding: 0;
         overflow: visible !important;
-    }
-
-    .page.hidden {
-        display: none !important;
-    }
-
-    .page.active {
-        display: block !important;
-    }
-
-    /* Optimize Table for Printing */
-    .table-wrapper {
-        overflow: visible !important;
-        box-shadow: none !important;
-        border: none !important;
-        margin-bottom: 2rem !important;
-    }
-
-    .treasury-table {
-        min-width: 0 !important;
-        width: 100% !important;
-        font-size: 8pt !important;
-        page-break-inside: auto;
-    }
-
-    .treasury-table tr {
-        page-break-inside: avoid;
-        page-break-after: auto;
-    }
-
-    .treasury-table th,
-    .treasury-table td {
-        padding: 4px 6px !important;
-        white-space: normal !important;
-        /* Allow text wrapping for item names */
-        border: 1px solid #000 !important;
-        color: #000 !important;
-    }
-
-    /* Ensure numbers are on a single line but names wrap */
-    .treasury-table td:not(.band-name-cell) {
-        white-space: nowrap !important;
-    }
-
-    .chapter-balance-box {
-        margin-top: 1rem !important;
-        padding: 1rem !important;
-        background: #fff !important;
-        color: #000 !important;
-        border: 2px solid #000 !important;
-        box-shadow: none !important;
-    }
-
-    #chapter-balance-value,
-    .balance-info h3,
-    .balance-info p {
-        color: #000 !important;
     }
 
     .summary-container {
@@ -1262,5 +1195,9 @@ body {
     #printable-voucher {
         display: block !important;
         border: none !important;
+    }
+
+    body {
+        background: #fff;
     }
 }
