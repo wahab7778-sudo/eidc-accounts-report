@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الحسابات الختامية - خزينة الدولة الليبية</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body id="mainBody">
+
+    <!-- ===================== LOGIN VIEW ===================== -->
+    <div id="loginView" class="login-screen">
+        <div class="login-card">
+            <div class="login-logo">
+                <h1 class="gov-title">مركز المعلومات والتوثيق الاقتصادي</h1>
+                <p class="gov-subtitle">إدارة الشؤون الإدارية والمالية</p>
+                <div class="login-divider"></div>
+                <h2 class="app-subname">نظام الحسابات الختامية</h2>
+            </div>
+            <form id="loginForm">
+                <div class="field-group">
+                    <label>اسم المستخدم</label>
+                    <input type="text" id="username" placeholder="أدخل اسم المستخدم" autocomplete="off" required>
+                </div>
+                <div class="field-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-login">دخول النظام</button>
+                <p id="loginError" class="login-error hidden">❌ اسم المستخدم أو كلمة المرور غير صحيحة</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================== MAIN APP ===================== -->
+    <div id="appContainer" class="hidden">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">🏛️</div>
+                <div>
+                    <div class="sidebar-title">الحسابات الختامية</div>
+                    <div class="sidebar-sub"></div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="showPage('dashboard'); return false;" id="nav-dashboard">
+                    <span class="nav-icon">📊</span> لوحة المتابعة
+                </a>
+                <div class="nav-group">
+                    <a href="#" class="nav-item" onclick="showChapter('1', 'حساب الباب الأول'); return false;" id="nav-chapter-1">
+                        <span class="nav-icon">📂</span> حساب الباب الأول
+                    </a>
+                    <div class="nav-sub-items" id="sub-chapter-1">
+                        <a href="#" class="nav-sub-item" id="nav-summary-monthly" onclick="showSummaryPage('monthly'); return false;">
+                            <span class="nav-icon">📅</span> الخلاصة الشهرية
+                        </a>
+                        <a href="#" class="nav-sub-item" id="nav-summary-annual" onclick="showSummaryPage('annual'); return false;">
+                            <span class="nav-icon">📈</span> الخلاصة السنوية
+                        </a>
+                        <a href="#" class="nav-sub-item" id="nav-chap1-exp-report" onclick="showChapterOneReport('expense'); return false;">
+                            <span class="nav-icon">📊</span> تبويب مصروفات الباب الأول
+                        </a>
+                        <a href="#" class="nav-sub-item" id="nav-chap1-rev-report" onclick="showChapterOneReport('revenue'); return false;">
+                            <span class="nav-icon">📊</span> تبويب إيرادات الباب الأول
+                        </a>
+                        <a href="#" class="nav-sub-item" id="nav-bank-ledger-1" onclick="showBankLedger('1'); return false;">
+                            <span class="nav-icon">🏦</span> سجل حساب المصرف
+                        </a>
+                    </div>
+                </div>
+                <a href="#" class="nav-item" onclick="showChapter('2', 'حساب الباب الثاني'); return false;"
+                    id="nav-chapter-2">
+                    <span class="nav-icon">📂</span> حساب الباب الثاني
+                </a>
+                <a href="#" class="nav-item" onclick="showChapter('3', 'حساب باب التحول'); return false;"
+                    id="nav-chapter-3">
+                    <span class="nav-icon">📂</span> حساب باب التحول
+                </a>
+                <a href="#" class="nav-item" onclick="showChapter('4', 'حساب الودائع والامانات'); return false;"
+                    id="nav-chapter-4">
+                    <span class="nav-icon">📂</span> حساب الودائع والامانات
+                </a>
+
+                <a href="#" class="nav-item" onclick="showPage('financial-dept'); return false;" id="nav-financial-dept">
+                    <span class="nav-icon">💼</span> القسم المالي
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('internal-audit'); return false;" id="nav-internal-audit">
+                    <span class="nav-icon">🔍</span> المراجعة الداخلية
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('financial-controller'); return false;" id="nav-financial-controller">
+                    <span class="nav-icon">⚖️</span> المراقب المالي
+                </a>
+
+                <a href="#" class="nav-item" onclick="showPage('voucher-archive'); return false;" id="nav-voucher-archive">
+                    <span class="nav-icon">📁</span> أرشيف المعاملات
+                </a>
+                
+                <a href="#" class="nav-item" onclick="showPage('entry'); return false;" id="nav-entry">
+                    <span class="nav-icon">✍️</span> إدخال البيانات المباشر
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('report'); return false;" id="nav-report">
+                    <span class="nav-icon">📋</span> التقرير الختامي
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('admin-post'); return false;" id="nav-admin-post">
+                    <span class="nav-icon">📤</span> ترحيل الحسابات
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('settings'); return false;" id="nav-settings">
+                    <span class="nav-icon">⚙️</span> إعدادات التبويب
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-demo-mode" id="btn-demo-toggle" onclick="runDemoSimulation()">🚀 وضع المحاكاة</button>
+                <div class="sidebar-user">👤 <span id="loggedUser">المدير</span></div>
+                <button class="btn-logout" onclick="logout()">خروج</button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOP BAR -->
+            <div class="topbar">
+                <div class="topbar-right">
+                    <button class="btn-menu" onclick="toggleSidebar()">☰</button>
+                    <h2 class="page-title" id="pageTitle">لوحة المتابعة</h2>
+                </div>
+                <div class="topbar-left">
+                    <div class="year-selector">
+                        <label>السنة المالية:</label>
+                        <select id="globalYear" onchange="onYearChange()"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGES -->
+
+            <!-- DASHBOARD PAGE -->
+            <div id="page-dashboard" class="page active">
+                <!-- Dynamic Chapters Stats Grid -->
+                <div id="dashboard-chapters-stats" class="dashboard-chapters-grid">
+                    <!-- JS will inject Bab 1, 2, 3, 4 blocks here -->
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card wide">
+                        <h3>المسار الزمني الشهري (إجمالي الإيرادات والمصروفات)</h3>
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <h3>مقارنة الأداء حسب الأبواب</h3>
+                        <canvas id="chapterComparisonChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>توزيع الرصيد الختامي للأبواب</h3>
+                        <canvas id="balanceDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHAPTER PAGE -->
+            <div id="page-chapter" class="page hidden">
+                <div class="page-toolbar">
+                    <h3 id="chapterPageTitle">حساب الباب</h3>
+                    <div style="display:flex;gap:1rem;align-items:center;">
+                        <div id="chapter-summary-links" class="hidden" style="display:flex; gap:0.5rem;">
+                            <button class="btn-secondary" onclick="showSummaryPage('monthly')" style="background:#fefce8; border:1px solid #fde68a; color:#92400e;">📅 الخلاصة الشهرية</button>
+                            <button class="btn-secondary" onclick="showSummaryPage('annual')" style="background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46;">📈 الخلاصة السنوية</button>
+                        </div>
+                        <button class="btn-primary" onclick="window.print()">🖨️ طباعة</button>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 1.5rem; color: var(--revenue)">تبويب الإيرادات</h4>
+                <div class="table-wrapper">
+                    <table id="chap-rev-table" class="treasury-table">
+                        <thead id="chap-rev-thead"></thead>
+                        <tbody id="chap-rev-tbody"></tbody>
+                        <tfoot id="chap-rev-tfoot"></tfoot>
+                    </table>
+                </div>
+
+                <h4 style="margin-top: 2.5rem; color: var(--expense)">تبويب المصروفات</h4>
+                <div class="table-wrapper">
+                    <table id="chap-exp-table" class="treasury-table">
+                        <thead id="chap-exp-thead"></thead>
+                        <tbody id="chap-exp-tbody"></tbody>
+                        <tfoot id="chap-exp-tfoot"></tfoot>
+                    </table>
+                </div>
+
+                <div id="chapter-balance-container" class="chapter-balance-box">
+                    <div class="balance-info">
+                        <h3>الرصيد الدفتري لهذا الباب</h3>
+                        <p>صافي الفارق بين الإيرادات والمصروفات</p>
+                    </div>
+                    <h2 id="chapter-balance-value">0.000 د.ل</h2>
+                </div>
+            </div>
+
+            <!-- SUMMARY PAGE -->
+            <div id="page-summary" class="page hidden">
+                <div class="page-toolbar">
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <label style="font-weight: 800;">اختر الشهر للعرض:</label>
+                        <select id="summaryMonth" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border);" onchange="renderSummaryPage()">
+                            <option value="0">يناير</option>
+                            <option value="1">فبراير</option>
+                            <option value="2">مارس</option>
+                            <option value="3">أبريل</option>
+                            <option value="4">مايو</option>
+                            <option value="5">يونيو</option>
+                            <option value="6">يوليو</option>
+                            <option value="7">أغسطس</option>
+                            <option value="8">سبتمبر</option>
+                            <option value="9">أكتوبر</option>
+                            <option value="10">نوفمبر</option>
+                            <option value="11">ديسمبر (الخلاصة السنوية)</option>
+                        </select>
+                        <button class="btn-primary" onclick="window.print()">🖨️ طباعة الخلاصة</button>
+                    </div>
+                </div>
+                
+                <div id="summary-report-container" style="margin-top: 1.5rem;"></div>
+            </div>
+
+            <!-- CHAPTER ONE REPORTS PAGE -->
+            <div id="page-chap1-report" class="page hidden">
+                <div class="page-toolbar">
+                    <h3 id="chap1ReportTitle">تبويب الباب الأول</h3>
+                    <div style="display:flex; gap:1rem; align-items:center;">
+                        <button class="btn-primary" onclick="window.print()">🖨️ طباعة التقرير</button>
+                    </div>
+                </div>
+                <div id="chap1-report-container" style="margin-top: 1.5rem;" class="table-wrapper"></div>
+            </div>
+
+            <!-- BANK LEDGER PAGE -->
+            <div id="page-bank-ledger" class="page hidden">
+                <div class="page-toolbar">
+                    <h3 id="bankLedgerTitle">سجل حساب المصرف - الباب الأول</h3>
+                    <div style="display:flex; gap:1rem; align-items:center;">
+                        <div class="field-group" style="flex-direction: row; gap: 0.5rem; align-items: center;">
+                            <label>الشهر:</label>
+                            <select id="bankLedgerMonth" onchange="renderBankLedger()" style="padding: 0.4rem; border-radius: 8px;">
+                                <option value="0">يناير</option>
+                                <option value="1">فبراير</option>
+                                <option value="2">مارس</option>
+                                <option value="3">أبريل</option>
+                                <option value="4">مايو</option>
+                                <option value="5">يونيو</option>
+                                <option value="6">يوليو</option>
+                                <option value="7">أغسطس</option>
+                                <option value="8">سبتمبر</option>
+                                <option value="9">أكتوبر</option>
+                                <option value="10">نوفمبر</option>
+                                <option value="11">ديسمبر</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" onclick="window.print()">🖨️ طباعة السجل</button>
+                    </div>
+                </div>
+                <div id="bank-ledger-container" class="table-wrapper" style="margin-top: 1.5rem;"></div>
+            </div>
+
+            <!-- DATA ENTRY PAGE -->
+            <div id="page-entry" class="page hidden">
+                <div class="entry-tabs">
+                    <button id="btn-type-rev" class="etab active" onclick="switchEntryType('revenue',this)">📥 إدخال إيراد</button>
+                    <button id="btn-type-exp" class="etab" onclick="switchEntryType('expense',this)">📤 إدخال مصروف</button>
+                    <button id="btn-type-bank" class="etab" onclick="switchEntryType('bank',this)">🏦 سجل المصرف</button>
+                </div>
+                <div class="entry-card">
+                    <div class="entry-form-grid">
+                        <div class="field-group">
+                            <label id="entry-type-label">نوع العملية</label>
+                            <div class="entry-type-badge" id="entry-type-badge">إيراد</div>
+                        </div>
+                        <div class="field-group">
+                            <label>الشهر</label>
+                            <select id="entryMonth">
+                                <option value="0">يناير</option>
+                                <option value="1">فبراير</option>
+                                <option value="2">مارس</option>
+                                <option value="3">أبريل</option>
+                                <option value="4">مايو</option>
+                                <option value="5">يونيو</option>
+                                <option value="6">يوليو</option>
+                                <option value="7">أغسطس</option>
+                                <option value="8">سبتمبر</option>
+                                <option value="9">أكتوبر</option>
+                                <option value="10">نوفمبر</option>
+                                <option value="11">ديسمبر</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>الباب</label>
+                            <select id="entryBab" onchange="onEntryBabChange()">
+                                <option value="">-- اختر الباب --</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>البند</label>
+                            <div style="display: flex; gap: 0.5rem; align-items: center; width: 100%;">
+                                <select id="entryBand" style="flex: 1; margin: 0; min-height: 42px;">
+                                    <option value="">-- اختر البند --</option>
+                                </select>
+                                <button type="button" class="btn-primary" onclick="addNewBandQuick()" style="padding: 0 1rem; border-radius: 8px; white-space: nowrap; min-height: 42px;">+ إضافة بند</button>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label>المبلغ (د.ل)</label>
+                            <input type="number" id="entryAmount" placeholder="0.000" step="0.001" min="0">
+                        </div>
+                        <div class="field-group">
+                            <label>ملاحظات (اختياري)</label>
+                            <input type="text" id="entryNote" placeholder="أدخل ملاحظات إن وجدت">
+                        </div>
+
+                        <!-- BANK SPECIFIC FIELDS (hidden by default) -->
+                        <div class="field-group bank-only hidden">
+                            <label>التاريخ (يوم)</label>
+                            <input type="number" id="entryBankDay" placeholder="1-31" min="1" max="31">
+                        </div>
+                        <div class="field-group bank-only hidden">
+                            <label>البيان / المستفيد</label>
+                            <input type="text" id="entryBankDesc" placeholder="اسم المستفيد أو الوصف">
+                        </div>
+                        <div class="field-group bank-only hidden">
+                            <label>رقم الصك</label>
+                            <input type="text" id="entryBankCheck" placeholder="أدخل رقم الصك">
+                        </div>
+                        <div class="field-group bank-only hidden">
+                            <label>رقم المستند</label>
+                            <input type="text" id="entryBankDoc" placeholder="أدخل رقم المستند">
+                        </div>
+                        <div class="field-group bank-only hidden">
+                            <label>مدين (منه / إيراد)</label>
+                            <input type="number" id="entryBankDebit" placeholder="0.000" step="0.001">
+                        </div>
+                        <div class="field-group bank-only hidden">
+                            <label>دائن (له / مصروف)</label>
+                            <input type="number" id="entryBankCredit" placeholder="0.000" step="0.001">
+                        </div>
+                    </div>
+                    <div class="entry-actions">
+                        <button class="btn-primary btn-lg" onclick="saveEntry()">💾 حفظ البيانات</button>
+                        <button class="btn-secondary" onclick="clearEntry()">🗑️ مسح الحقول</button>
+                    </div>
+                    <div id="entry-feedback" class="entry-feedback hidden"></div>
+                </div>
+                <div class="entry-recent">
+                    <h4>آخر البيانات المُدخلة</h4>
+                    <div class="table-wrapper">
+                        <table class="treasury-table" id="recent-table">
+                            <thead>
+                                <tr>
+                                    <th>السنة</th>
+                                    <th>الشهر</th>
+                                    <th>الباب</th>
+                                    <th>البند</th>
+                                    <th>النوع</th>
+                                    <th>المبلغ</th>
+                                    <th>حذف</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REPORT PAGE -->
+            <div id="page-report" class="page hidden">
+                <div class="page-toolbar">
+                    <h3>التقرير الختامي (مقسم حسب الأبواب)</h3>
+                </div>
+                <!-- Global Summary Cards -->
+                <div class="report-summary-cards" style="margin-top: 1.5rem;">
+                    <div class="rcard green">
+                        <div class="rcard-icon">🟢</div>
+                        <div class="rcard-content">
+                            <div class="rcard-label">إجمالي الإيرادات الكلي</div>
+                            <div class="rcard-val" id="rep-rev">0</div>
+                        </div>
+                    </div>
+                    <div class="rcard red">
+                        <div class="rcard-icon">🔴</div>
+                        <div class="rcard-content">
+                            <div class="rcard-label">إجمالي المصروفات الكلي</div>
+                            <div class="rcard-val" id="rep-exp">0</div>
+                        </div>
+                    </div>
+                    <div class="rcard blue">
+                        <div class="rcard-icon">🔵</div>
+                        <div class="rcard-content">
+                            <div class="rcard-label">الرصيد الدفتري الكلي</div>
+                            <div class="rcard-val" id="rep-bal">0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dynamic Chapter Reports Container -->
+                <div id="chapters-reports-container"></div>
+            </div>
+
+            <!-- SETTINGS PAGE -->
+            <div id="page-settings" class="page hidden">
+                <div class="page-toolbar">
+                    <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                        <h3>⚙️ إعدادات التبويب والأبواب</h3>
+                        <div style="display:flex; gap: 0.75rem;">
+                            <button class="btn-primary btn-sm" onclick="addBab('revenue')">+ إضافة باب إيرادات</button>
+                            <button class="btn-primary btn-sm" onclick="addBab('expense')">+ إضافة باب مصروفات</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dynamic Side-by-Side Container -->
+                <div id="settings-dynamic-container" style="margin-top: 1.5rem;"></div>
+
+                <!-- User Management Container -->
+                <div id="user-management-container" style="margin-top: 2.5rem;"></div>
+
+                <div style="margin-top:1.5rem;display:flex;gap:1rem; padding: 1.5rem; background: rgba(239, 68, 68, 0.05); border-radius: 12px; border: 1px dashed var(--expense);">
+                    <button class="btn-danger" onclick="clearAllData()">🗑️ مسح جميع الإدخالات</button>
+                    <button class="btn-secondary" onclick="loadDefaults()">🔄 تصفير وإعادة تهيئة الأبواب</button>
+                </div>
+
+                <div style="margin-top:1.5rem;display:flex;gap:1rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.05); border-radius: 12px; border: 1px dashed var(--primary);">
+                    <button class="btn-primary" onclick="window.exportDataJSON()" style="background:#10b981; color:white; padding:10px 20px; border-radius:8px; border:none; cursor:pointer;">📥 تصدير البيانات (JSON)</button>
+                    <label class="btn-secondary" style="background:white; color:#0f172a; padding:10px 20px; border-radius:8px; border:1px solid #cbd5e1; cursor:pointer; font-weight:600; margin:0;">
+                        📤 استيراد البيانات (JSON)
+                        <input type="file" id="importJsonFile" accept=".json" style="display:none;" onchange="window.importDataJSON(event)">
+                    </label>
+                </div>
+            </div>
+
+            <!-- FINANCIAL DEPT PAGE -->
+            <div id="page-financial-dept" class="page hidden">
+                <div class="page-toolbar">
+                    <h3 id="financialPageTitle">القسم المالي - إعداد المعاملات</h3>
+                    <div style="display:flex; gap:1rem; align-items:center;">
+                        <button class="btn-primary" onclick="showVoucherForm()">+ إعداد إذن صرف جديد</button>
+                    </div>
+                </div>
+
+                <!-- Voucher List -->
+                <div id="voucher-list-view" class="entry-recent" style="margin-top: 2rem;">
+                    <h4>أذونات الصرف المعدّة</h4>
+                    <div class="table-wrapper">
+                        <table class="treasury-table">
+                            <thead>
+                                <tr>
+                                    <th>رقم الإذن</th>
+                                    <th>التاريخ</th>
+                                    <th>المستفيد</th>
+                                    <th>المبلغ</th>
+                                    <th>البند</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vouchers-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Voucher Form (Modal or Overlay style) -->
+                <div id="voucher-form-view" class="entry-card hidden" style="margin-top: 2rem;">
+                    <h4 id="voucher-form-title">إعداد إذن صرف جديد</h4>
+                    <div class="entry-form-grid">
+                        <div class="field-group">
+                            <label>رقم إذن الصرف (آلي)</label>
+                            <input type="text" id="v_num" placeholder="يُولد آلياً" readonly style="background: #f8fafc; font-weight: 700; color: var(--primary);">
+                        </div>
+                        <div class="field-group">
+                            <label>تاريخ المستند</label>
+                            <input type="date" id="v_date" onchange="updateVoucherAutoNum()">
+                        </div>
+                        <div class="field-group">
+                            <label>المستفيد</label>
+                            <input type="text" id="v_beneficiary" placeholder="اسم الجهة أو الشخص المستفيد">
+                        </div>
+                        <div class="field-group">
+                            <label>المبلغ الإجمالي (د.ل)</label>
+                            <input type="number" id="v_amount" placeholder="0.000" step="0.001" oninput="calculateVoucherStamp()">
+                        </div>
+                        
+                        <!-- conditional fields for Deductions -->
+                        <div id="v_stamp_container" class="hidden" style="grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; background: #f0f9ff; padding: 1.2rem; border-radius: 12px; border: 1px solid #bae6fd;">
+                            <div class="field-group">
+                                <label style="color: #0369a1;">حصة المضمون (5.125%)</label>
+                                <input type="number" id="v_social" readonly placeholder="0.000" style="background: #fff; border-color: #7dd3fc; font-weight: 700;">
+                            </div>
+                            <div class="field-group">
+                                <label style="color: #0369a1;">التضامن (1%)</label>
+                                <input type="number" id="v_solidarity" readonly placeholder="0.000" style="background: #fff; border-color: #7dd3fc; font-weight: 700;">
+                            </div>
+                            <div class="field-group">
+                                <label style="color: #0369a1;">الدمغة (0.5%)</label>
+                                <input type="number" id="v_stamp" readonly placeholder="0.000" style="background: #fff; border-color: #7dd3fc; font-weight: 700;">
+                            </div>
+                            <div class="field-group" style="grid-column: span 3;">
+                                <label style="color: #036b00; font-weight: 900;">صافي القيمة المستحقة (قيمة الصك)</label>
+                                <input type="number" id="v_net" readonly placeholder="0.000" style="background: #fff; border-color: #22c55e; font-weight: 900; color: #166534; font-size: 1.2rem;">
+                            </div>
+                        </div>
+
+                        <div class="field-group" style="grid-column: span 2;">
+                            <label>البيان / الغرض من الصرف</label>
+                            <input type="text" id="v_desc" placeholder="شرح موجز لسبب الصرف">
+                        </div>
+                        <div class="field-group">
+                            <label>الباب</label>
+                            <select id="v_bab" onchange="onVoucherBabChange()">
+                                <option value="">-- اختر الباب --</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>البند</label>
+                            <select id="v_band">
+                                <option value="">-- اختر البند --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="entry-actions">
+                        <button class="btn-primary btn-lg" onclick="saveVoucher()">💾 حفظ واعتماد الإذن</button>
+                        <button class="btn-secondary" onclick="hideVoucherForm()">إلغاء</button>
+                    </div>
+                </div>
+
+                <!-- Printable Voucher Template (Hidden) -->
+                <div id="printable-voucher" class="no-print hidden" style="padding: 2rem; background: #fff; width: 210mm; min-height: 297mm; margin: auto; border: 1px solid #000;">
+                    <!-- Content will be injected by JS -->
+                </div>
+            </div>
+
+            <!-- INTERNAL AUDIT PAGE -->
+            <div id="page-internal-audit" class="page hidden">
+                <div class="page-toolbar">
+                    <h3 id="auditPageTitle">قسم المراجعة الداخلية - فحص المعاملات</h3>
+                </div>
+
+                <div class="entry-recent" style="margin-top: 2rem;">
+                    <h4>المعاملات الواردة للمراجعة</h4>
+                    <div class="table-wrapper">
+                        <table class="treasury-table">
+                            <thead>
+                                <tr>
+                                    <th>رقم الإذن</th>
+                                    <th>المستفيد</th>
+                                    <th>المبلغ الإجمالي</th>
+                                    <th>البند</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="audit-vouchers-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINANCIAL CONTROLLER PAGE -->
+            <div id="page-financial-controller" class="page hidden">
+                <div class="page-toolbar">
+                    <h3 id="controllerPageTitle">مكتب المراقب المالي - الاعتماد النهائي</h3>
+                </div>
+
+                <div class="entry-recent" style="margin-top: 2rem;">
+                    <h4>المعاملات الجاهزة للاعتماد النهائي</h4>
+                    <div class="table-wrapper">
+                        <table class="treasury-table">
+                            <thead>
+                                <tr>
+                                    <th>رقم الإذن</th>
+                                    <th>المستفيد</th>
+                                    <th>المبلغ الإجمالي</th>
+                                    <th>البند</th>
+                                    <th>حالة المراجعة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="controller-vouchers-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- VOUCHER ARCHIVE PAGE -->
+            <div id="page-voucher-archive" class="page hidden">
+                <div class="page-toolbar">
+                    <h3 id="archivePageTitle">أرشيف وتتبع معاملات أذونات الصرف</h3>
+                </div>
+
+                <div class="search-bar" style="margin-top:1.5rem; display:flex; gap:1rem; flex-wrap:wrap; background:white; padding:1.5rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                    <div class="field-group" style="flex:1; min-width:200px;">
+                        <label>بحث بالرقم أو المستفيد</label>
+                        <input type="text" id="archiveSearch" placeholder="مثلاً: 123 أو اسم الشركة..." oninput="renderVoucherArchive()">
+                    </div>
+                    <div class="field-group" style="width:200px;">
+                        <label>تصفية حسب الحالة</label>
+                        <select id="archiveStatusFilter" onchange="renderVoucherArchive()">
+                            <option value="all">كل المعاملات</option>
+                            <option value="pending_audit">قيد المراجعة</option>
+                            <option value="approved_audit">معتمدة من المراجعة</option>
+                            <option value="approved_controller">معتمدة نهائياً</option>
+                            <option value="posted">تم ترحيلها للتبويب</option>
+                            <option value="rejected">مرجعة للتصحيح</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="entry-recent" style="margin-top: 1.5rem;">
+                    <div class="table-wrapper">
+                        <table class="treasury-table">
+                            <thead>
+                                <tr>
+                                    <th>تاريخ الإحصاء</th>
+                                    <th>رقم الإذن</th>
+                                    <th>المستفيد</th>
+                                    <th>المبلغ</th>
+                                    <th>البيان</th>
+                                    <th>الحالة الحالية</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="archive-vouchers-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN POSTING PAGE -->
+            <div id="page-admin-post" class="page hidden">
+                <div class="page-toolbar">
+                    <h3 id="adminPostPageTitle">إدارة ترحيل المعاملات للحسابات الختامية</h3>
+                </div>
+
+                <div class="entry-recent" style="margin-top: 2rem;">
+                    <h4>المعاملات الجاهزة للترحيل النهائي (بعد إصدار الصكوك)</h4>
+                    <div class="table-wrapper">
+                        <table class="treasury-table">
+                            <thead>
+                                <tr>
+                                    <th>رقم الإذن</th>
+                                    <th>المستفيد</th>
+                                    <th>المبلغ الإجمالي</th>
+                                    <th>الباب / البند</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-post-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
